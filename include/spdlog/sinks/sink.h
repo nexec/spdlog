@@ -23,6 +23,8 @@ public:
     virtual ~sink() {}
     virtual void log(const details::log_msg& msg) = 0;
     virtual void flush() = 0;
+    virtual void rotate()
+    { }
 
     bool should_log(level::level_enum msg_level) const;
     void set_level(level::level_enum log_level);

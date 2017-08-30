@@ -39,6 +39,12 @@ public:
         _force_flush = force_flush;
     }
 
+    void rotate() override
+    {
+        _flush();
+        _file_helper.reopen(false);
+    }
+
 protected:
     void _sink_it(const details::log_msg& msg) override
     {
@@ -84,7 +90,7 @@ protected:
         _current_size += msg.formatted.size();
         if (_current_size > _max_size)
         {
-            _rotate();
+            rotate();
             _current_size = msg.formatted.size();
         }
         _file_helper.write(msg);
@@ -112,7 +118,7 @@ private:
     // log.txt.2 -> log.txt.3
     // lo3.txt.3 -> delete
 
-    void _rotate()
+    void rotate() override
     {
         using details::os::filename_to_str;
         _file_helper.close();
